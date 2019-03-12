@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>人口金字塔绘制</title>
+    <meta name="description" content="人口金字塔绘制">
+    <meta name="keywords" content="人口金字塔">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="static/echarts/echarts.min.js"></script>
+    <script src="static/echarts/layui/layui.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/echarts/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="static/echarts/custom.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+    <legend>标题</legend>
+</fieldset>
+<form class="layui-form" action="" id="form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" id="title" lay-verify="title" autocomplete="off" placeholder="请输入标题"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">副标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="subtitle" id="subtitle" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">副标题链接</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sublink" id="sublink" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">X轴标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="xlabel" id="xlabel" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">Y轴标题</label>
+            <div class="layui-input-inline">
+                <input type="text" name="ylabel" id="ylabel" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit="" lay-filter="ok" id="ok">确定</button>
+                <button type="reset" class="layui-btn layui-btn-primary" lay-filter="reset" id="reset">重置</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="notice">提示</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="sample">示例数据</button>
+                <button type="button" class="layui-btn" id="uploadBtn">
+                    <i class="layui-icon">&#xe67c;</i>上传文件
+                </button>
+            </div>
+        </div>
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+            <legend>样式</legend>
+        </fieldset>
+        <div class="layui-inline">
+            <label class="layui-form-label">宽度</label>
+            <div class="layui-input-block">
+                <div id="sliderw"></div>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">高度</label>
+            <div class="layui-input-block">
+                <div id="sliderh"></div>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">透明度</label>
+            <div class="layui-input-block">
+                <div id="slidero"></div>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">刻度线Y</label>
+            <div class="layui-input-block">
+                <div id="slideryaxis"></div>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">间距</label>
+            <div class="layui-input-block">
+                <div id="bar_gap"></div>
+            </div>
+        </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+            <legend>开关</legend>
+        </fieldset>
+        <div class="layui-inline">
+            <label class="layui-form-label">平滑</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" name="smooth" lay-skin="switch" lay-filter="switch-smooth"
+                       lay-text="开启|关闭">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">标签</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" name="label" lay-skin="switch" lay-filter="switch-label"
+                       lay-text="开启|关闭">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="gtype" lay-filter="gtype" value="bar" title="Bar" checked="">
+                <input type="radio" name="gtype" lay-filter="gtype" value="line" title="Line">
+                <input type="radio" name="gtype" lay-filter="gtype" value="禁" title="禁用" disabled="">
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">颜色1</label>
+            <div class="layui-input-block">
+                <div id="color1"></div>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">颜色2</label>
+            <div class="layui-input-block">
+                <div id="color2"></div>
+            </div>
+        </div>
+
+
+    </div>
+</form>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">
+    <legend>效果</legend>
+</fieldset>
+<div id="main" style="width: 800px;height:600px;"></div>
+<script>
+    function setPri(obj) {
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.showLoading();
+        myChart.width = obj.width;
+        myChart.height = obj.height;
+        // 设置选项
+        var option = {
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: true},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                },
+                orient: 'vertical',
+            },
+            title: {
+                text: obj.title,
+                subtext: obj.subtitle,
+                sublink: obj.sublink,
+                subtarget: 'blank',
+                subtextStyle: {
+                    color: '#aaa',
+                    fontStyle: 'normal',
+                    fontSize: 12,
+                    algin: 'center',
+                },
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter: function (datas) {
+                    var res = datas[0].name + '<br/>';
+                    for (var i = 0, length = datas.length; i < length; i++) {
+                        res += datas[i].marker + datas[i].seriesName + '：'
+                            + numeral(Math.abs(datas[i].value[i + 1])).format('0,0') + ' 人<br/>';
+                    }
+                    return res;
+                }
+            },
+            legend: {
+                data: [obj.columns[1], obj.columns[2]]
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            dataset: {
+                source: obj.data
+            },
+            xAxis: [
+                {
+                    name: obj.xlabel,
+                    nameLocation: "center",
+                    nameGap: 25,
+                    nameRotate: 0,
+                    axisLine: {
+                        // symbol: "arrow",//坐标轴箭头
+                        symbolSize: "5",//坐标轴箭头大小
+                        lineStyle: {	//坐标轴线段设置
+                            color: "#333",//颜色
+                            width: 1,//坐标轴线段宽度
+                        },
+                    },
+                    axisLabel: {
+                        formatter: function (value) {
+                            return numeral(Math.abs(value)).format('0,0');
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: "#ccc",//颜色
+                            width: 1,
+                        },
+                    },
+                }
+            ],
+            yAxis: [
+                {
+                    name: obj.ylabel,
+                    type: 'category',
+                    nameLocation: "middle",
+                    nameGap: 50,
+                    nameRotate: 90,
+                    axisLine: {
+                        lineStyle: {	//坐标轴线段设置
+                            color: "#333",//颜色
+                            width: 1,//坐标轴线段宽度
+                        },
+                    },
+                    axisTick: {
+                        alignWithLabel: true,
+                        length: obj.axisTick_length,
+                    },
+                    boundaryGap: true,
+                }
+            ],
+            series: [
+                {
+                    name: obj.columns[1],
+                    type: obj.gtype,
+                    smooth: obj.smooth,
+                    stack: obj.columns[0],
+                    barCategoryGap: obj.bar_gap + '%',
+                    label: {
+                        show: obj.label,// 是否显示标签值
+                        position: 'left', //显示位置
+                        formatter: function (data) {
+                            return numeral(Math.abs(data.data[1])).format('0,0');
+                        },
+                        color: "#6f6f6f",
+                    },
+                    itemStyle: {
+                        color: obj.color_male,
+                    },
+                    areaStyle: {
+                        color: obj.color_male,
+                        opacity: obj.area_opacity,
+                    },
+                },
+                {
+                    name: obj.columns[2],
+                    type: obj.gtype,
+                    smooth: obj.smooth,
+                    stack: obj.columns[0],
+                    barCategoryGap: obj.bar_gap + '%',
+                    label: {
+                        show: obj.label,// 是否显示标签值
+                        position: 'right', //显示位置
+                        color: "#6f6f6f",
+                        formatter: function (data) {
+                            return numeral(Math.abs(data.data[2])).format('0,0');
+                        },
+                    },
+                    itemStyle: {
+                        color: obj.color_female, //设置颜色
+                    },
+                    areaStyle: {
+                        color: obj.color_female,
+                        opacity: obj.area_opacity,
+                    },
+                }
+            ]
+        };
+        myChart.hideLoading();
+        myChart.setOption(option);
+    }
+
+    function setPriW(width) {
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.resize(width);
+    }
+
+    function setPriH(height) {
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.resize(height);
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        layui.use(['layer', 'form', 'slider', 'colorpicker', 'upload', 'table'], function () {
+            var layer = layui.layer
+                , form = layui.form
+                , slider = layui.slider
+                , colorpicker = layui.colorpicker
+                , upload = layui.upload
+                , table = layui.table;
+
+            $("#notice").on('click', function () {
+                layer.alert('1. 上传文件支持xls、xlsx文件<br />2. 数据格式请参考示例数据<br />3. 重置不包括宽高', {
+                    skin: 'layui-layer-molv' //样式类名
+                    , closeBtn: 0
+                });
+            });
+
+
+            var obj = {
+                width: 800,
+                height: 800,
+                title: "标题",
+                subtitle: "副标题",
+                sublink: "副标题链接",
+                smooth: true,
+                label: true,
+                area_opacity: 0.7,
+                axisTick_length: 5,
+                color_male: '#20b7a9',
+                color_female: '#ff426e',
+                ylabel: '年龄组',
+                xlabel: '人口数量',
+                columns: ['年龄', '男性', '女性'],
+                bar_gap: 5,
+                data: [
+                    ['年龄', '男性', '女性'],
+                    ['0-4', -41062566, 34470044],
+                    ['5-9', -38464665, 32416884],
+                    ['10-14', -40267277, 34641185],
+                    ['15-19', -51904830, 47984284],
+                    ['20-24', -64008573, 63403945],
+                    ['25-29', -50837038, 50176814],
+                    ['30-34', -49521822, 47616381],
+                    ['35-39', -60391104, 57634855],
+                    ['40-44', -63608678, 61145286],
+                    ['45-49', -53776418, 51818135],
+                    ['50-54', -40363234, 38389937],
+                    ['55-59', -41082938, 40229536],
+                    ['60-64', -29834426, 28832856],
+                    ['65-69', -20748471, 20364811],
+                    ['70-74', -16403453, 16568944],
+                    ['75-79', -11278859, 12573274],
+                    ['80-84', -5917502, 7455696],
+                    ['85-89', -2199810, 3432118],
+                    ['90-94', -530872, 1047435],
+                    ['95-99', -117716, 252263],
+                    ['100+', -8852, 27082]
+                ],
+            };
+            //自定义颜色
+            slider.render({
+                elem: '#sliderw'
+                , theme: '#1E9FFF' //主题色
+                , step: 10,
+                min: 400,
+                max: 2000,
+                value: 800,
+                change: function (value) {
+                    width = value;
+                    $("#main").css('width', width);
+                    setPriW(width);
+                }
+            });
+            slider.render({
+                elem: '#sliderh'
+                , theme: '#1E9FFF' //主题色
+                , step: 10,
+                min: 400,
+                max: 2000,
+                value: 800,
+                change: function (value) {
+                    height = value;
+                    $("#main").css('height', height);
+                    setPriH(height);
+                }
+            });
+            slider.render({
+                elem: '#slidero'
+                , theme: '#1E9FFF' //主题色
+                , step: 1,
+                min: 0,
+                max: 100,
+                value: 70,
+                change: function (value) {
+                    obj.area_opacity = value / 100;
+                    setPri(obj);
+                }
+            });
+            slider.render({
+                elem: '#slideryaxis'
+                , theme: '#1E9FFF' //主题色
+                , step: 1,
+                min: 0,
+                max: 10,
+                value: 5,
+                change: function (value) {
+                    obj.axisTick_length = value;
+                    setPri(obj);
+                }
+            });
+            slider.render({
+                elem: '#bar_gap'
+                , theme: '#1E9FFF' //主题色
+                , step: 1,
+                min: 0,
+                max: 50,
+                value: 20,
+                change: function (value) {
+                    obj.bar_gap = value;
+                    setPri(obj);
+                }
+            });
+            colorpicker.render({
+                elem: '#color1'
+                , color: '#20b7a9'
+                , format: 'hex'
+                , alpha: 1,
+                size: 'xs',
+                change: function (value) {
+                    obj.color_male = value;
+                    setPri(obj);
+                }
+            });
+            colorpicker.render({
+                elem: '#color2'
+                , color: '#ff426e'
+                , format: 'hex'
+                , alpha: 1,
+                size: 'xs',
+                change: function (value) {
+                    obj.color_female = value;
+                    setPri(obj);
+                }
+            });
+            upload.render({
+                elem: '#uploadBtn' //绑定元素
+                , url: "{{url_for('upload')}}" //上传接口
+                , accept: 'file'
+                , method: 'post'
+                , acceptMime: 'xlsx'
+                , exts: 'xlsx|xls'
+                , auto: true
+                , size: 20000
+                , drag: true
+                , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(1); //上传loading
+                    layer.msg('上传中……');
+                }
+                , done: function (res) {
+                    //上传完毕回调
+                    if (res.code == 1) {
+                        layer.closeAll('loading'); //关闭loading
+                        layer.msg(res.msg);
+                    }
+                    obj.data = res.data;
+                    obj.columns = res.columns;
+                    setPri(obj);
+                    // console.log(res);
+                }
+                , error: function () {
+                    //请求异常回调
+                    layer.closeAll('loading'); //关闭loading
+                    layer.msg("上传失败");
+                }
+            });
+
+            $("#reset").on('click', function () {
+                obj.width = 800;
+                obj.height = 800;
+                obj.title = "标题";
+                obj.subtitle = "副标题";
+                obj.sublink = "副标题链接";
+                obj.gtype = "bar";
+                obj.smooth = true;
+                obj.label = true;
+                obj.area_opacity = 0.7;
+                obj.axisTick_length = 5;
+                obj.color_male = '#20b7a9';
+                obj.color_female = '#ff426e';
+                obj.ylabel = "年龄";
+                obj.xlabel = "数量";
+                setPri(obj);
+            });
+            form.on('radio(gtype)', function (data) {
+                obj.gtype = data.value;
+                setPri(obj);
+            });
+            form.on('switch(switch-smooth)', function (data) {
+                obj.smooth = data.elem.checked;
+                setPri(obj);
+            });
+            form.on('switch(switch-label)', function (data) {
+                obj.label = data.elem.checked;
+                setPri(obj);
+            });
+            form.on('submit(ok)', function (data) {
+                // console.log(data.field); //当前容器的全部表单字段，名值对形式：{name: value}
+                obj.title = data.field.title;
+                obj.subtitle = data.field.subtitle;
+                obj.sublink = data.field.sublink;
+                obj.xlabel = data.field.xlabel;
+                obj.ylabel = data.field.ylabel;
+                setPri(obj);
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+
+            $("#sample").on('click', function () {
+                layer.open({
+                    type: 1,
+                    title: '示例数据',
+                    area: ['660px', '480px'],
+                    scrollbar: false,
+                    content: '<fieldset class="layui-elem-field layui-field-title" style="margin-top: 5px;">\n' +
+                        '            <legend>Excel 示例数据格式</legend>\n' +
+                        '        </fieldset><table id="data_table" lay-filter="data_table"></table>',
+                    success: function () {
+                        table.render({
+                            elem: '#data_table'
+                            , height: 350
+                            , title: "Excel 示例数据格式"
+                            , url: "{{url_for('default')}}" //数据接口
+                            , page: true //开启分页
+                            , toolbar: 'default'
+                            , defaultToolbar: ['filter', 'print', 'exports']
+                            , cols: [[ //表头
+                                {field: '年龄', title: '年龄', width: 100, sort: true, fixed: 'left'}
+                                , {field: '男性', title: '男性', width: 100, sort: true}
+                                , {field: '女性', title: '女性', width: 100, sort: true}
+                                , {field: '', title: '', width: 100}
+                                , {field: '', title: '', width: 100}
+                            ]]
+                            , align: 'center'
+                            , done: function (data) {
+                                // console.log(data)
+                            }
+                        });
+                    }
+                });
+            });
+        });
+        var obj = {
+            width: 800,
+            height: 800,
+            title: "标题",
+            subtitle: "副标题",
+            sublink: "副标题链接",
+            gtype: "bar",
+            smooth: true,
+            label: true,
+            area_opacity: 0.7,
+            axisTick_length: 5,
+            color_male: '#20b7a9',
+            color_female: '#ff426e',
+            ylabel: '年龄组',
+            xlabel: '人口数量',
+            columns: ['年龄', '男性', '女性'],
+            bar_gap: 5,
+            data: [
+                ['年龄', '男性', '女性'],
+                ['0-4', -41062566, 34470044],
+                ['5-9', -38464665, 32416884],
+                ['10-14', -40267277, 34641185],
+                ['15-19', -51904830, 47984284],
+                ['20-24', -64008573, 63403945],
+                ['25-29', -50837038, 50176814],
+                ['30-34', -49521822, 47616381],
+                ['35-39', -60391104, 57634855],
+                ['40-44', -63608678, 61145286],
+                ['45-49', -53776418, 51818135],
+                ['50-54', -40363234, 38389937],
+                ['55-59', -41082938, 40229536],
+                ['60-64', -29834426, 28832856],
+                ['65-69', -20748471, 20364811],
+                ['70-74', -16403453, 16568944],
+                ['75-79', -11278859, 12573274],
+                ['80-84', -5917502, 7455696],
+                ['85-89', -2199810, 3432118],
+                ['90-94', -530872, 1047435],
+                ['95-99', -117716, 252263],
+                ['100+', -8852, 27082]
+            ],
+        };
+        setPri(obj);
+
+    });
+</script>
+
+</body>
+
+</html>

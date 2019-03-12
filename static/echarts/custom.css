@@ -1,0 +1,32 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2019-03-09 17:44:56
+ * @version $Id$
+ */
+#sliderw {
+	width: 200px;
+	padding-top: 16px;
+}
+#sliderh {
+	width: 200px;
+	padding-top: 16px;
+}
+#slidero {
+	width: 100px;
+	padding-top: 16px;
+}
+#slideryaxis {
+	width: 100px;
+	padding-top: 16px;
+}
+#bar_gap {
+	width: 100px;
+	padding-top: 16px;
+}
+
+#form {
+	/*width:800px;*/
+	font-size: 10px;
+}
