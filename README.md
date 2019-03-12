@@ -1,5 +1,4 @@
-population-pyramid
-
+# population-pyramid
 
 
 this is a mini mini flask app.
@@ -10,7 +9,7 @@ demo : http://pyramid.recordme.club
 
 used to backup code.
 
-人口金字塔
+# 人口金字塔
 
 一个很小很小的 flask 应用。
 
